@@ -1,3 +1,6 @@
+
+
+
 import React, { useState } from 'react';
 import axios from 'axios';
 
@@ -15,7 +18,7 @@ const Login = () => {
         password,
       });
 
-      console.log('Login response:', res.data);
+    console.log('Login response:', res.data);
       setMessage(res.data.message);
       // Redirect to dashboard later if needed
     } catch (err) {

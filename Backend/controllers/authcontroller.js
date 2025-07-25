@@ -142,7 +142,6 @@ const loginUser = async (req, res) => {
    if (!isMatch) {
       return res.status(401).json({ message: 'Incorrect password' });
 }
-
  // If all good
     res.status(200).json({ message: 'Login successful', user: { name: user.name, email: user.email } });
   } catch (error) {
