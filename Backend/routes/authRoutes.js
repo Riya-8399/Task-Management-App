@@ -5,7 +5,7 @@ const { signupUser, verifyEmail, loginUser, forgotPassword, resetPassword, getPr
 
 
 router.post('/signup', signupUser);
-router.get('/verify-email', verifyEmail);
+router.post('/verify-email', verifyEmail);
 router.post('/login', loginUser);
 router.post('/forgot-password', forgotPassword);
 router.post('/reset-password', resetPassword);

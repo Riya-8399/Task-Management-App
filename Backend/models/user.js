@@ -2,7 +2,7 @@ const mongoose = require('mongoose');  // Import mongoose so we can define a sch
 
 // Step 1: Create a schema (structure of the user data)
 const userSchema = new mongoose.Schema({
-  name: {
+  fullName: {
     type: String,             // name must be a string
     required: true,           // name is mandatory
     trim: true                // removes extra spaces
@@ -21,23 +21,16 @@ const userSchema = new mongoose.Schema({
   },
 
  // NEW fields for email verification
+ verificationCode: {
+  type: String,
+},
+codeExpiresAt: { type: Date }, // <-- ADD THIS
+
   verified: {
     type: Boolean,
     default: false,        // user is not verified by default
   },
-  verificationToken: {
-    type: String,
-  },
-resetPasswordToken: { 
-    type: String
-},
-resetPasswordExpires: {
-    type: Date
-}
-},
-{
-  timestamps: true            // this adds `createdAt` and `updatedAt` automatically
-});
+ });
 
 // Step 2: Create a model from the schema
 const User = mongoose.model('User', userSchema);

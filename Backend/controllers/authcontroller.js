@@ -3,6 +3,8 @@ const { v4: uuidv4 } = require('uuid'); // for generating unique tokens
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
+const asyncHandler = require('express-async-handler');
+
 
 
 
@@ -15,101 +17,96 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+  const signupUser = asyncHandler(async (req, res) => {
+  const { fullName, email, password } = req.body;
 
-// POST /api/signup
-const signupUser = async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
-
-       
-    // Check if user already exists
+    // Check if user exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
     }
 
- // Generate a verification token
-    const verificationToken = uuidv4();
+    // Hash password
+     const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create new user with verification token and verified=false
-   const hashedPassword = await bcrypt.hash(password, 10); // 10 is salt rounds
+    
+
+    // Generate 4-digit verification code
+    const verificationCode = Math.floor(1000 + Math.random() * 9000).toString();
+
+   // Hash the code
+    const hashedCode = await bcrypt.hash(verificationCode, 10);
+
+    // Set expiry time (e.g., 10 minutes from now)
+const codeExpiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 mins
+
+    
+  // Save user with hashed verification code
     const newUser = new User({
-     name,
-     email,
-     password: hashedPassword,
-     verified: false,
-     verificationToken,
+      fullName,
+      email,
+      password: hashedPassword,
+      verificationCode: hashedCode,
+      codeExpiresAt,     
+      verified: false, 
+    });
+
+     // Save user to database
+  await newUser.save(); 
+  
+    if (newUser) {
+    // Send plain code in the email
+    await transporter.sendMail({
+  from: process.env.EMAIL_USER,
+  to: email,
+  subject: 'Email Verification Code',
+  text: `Your verification code is: ${verificationCode}`, // use the actual code, not `code`
 });
 
-    await newUser.save();
 
-    // Send verification email
-   const verificationUrl = `http://localhost:3000/verify-email?token=${verificationToken}`;
-
-    const mailOptions = {
-      from:`"Task Manager" <${process.env.EMAIL_USER}>`,
-      to: email,
-      subject: 'Verify your email for Task Manager App',
-     html: `
-    <div style="font-family: Arial, sans-serif; line-height: 1.5;">
-      <p>Hi ${name},</p>
-      <p>Thank you for signing up for <strong>Task Manager App</strong>.</p>
-      <p>To complete your registration, please click the button below to verify your email:</p>
-      <p>
-        <a href="${verificationUrl}" 
-           style="display: inline-block; background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;">
-           Verify Email
-        </a>
-      </p>
-      <p>If the button doesn't work, copy and paste this link into your browser:</p>
-      <p><a href="${verificationUrl}">${verificationUrl}</a></p>
-      <p>Thanks,<br/>Task Manager Team</p>
-    </div>
-  `,
-};
-
-    await transporter.sendMail(mailOptions);
-
-    res.status(201).json({ message: 'User created successfully. Please verify your email.' });
-  } catch (error) {
-       
-    res.status(500).json({ message: 'Signup failed', error: error.message });
+    res.status(201).json({
+      _id: newUser.id,
+      fullName: newUser.fullName,
+      email: newUser.email,
+      message: 'User registered successfully. Check email for verification code.',
+    });
+  } else {
+    res.status(400);
+    throw new Error('Invalid user data');
   }
-};
+});
 
-const verifyEmail = async (req, res) => {
-  try {
-    const { token } = req.query;
+// Verify email
+const verifyEmail = asyncHandler(async (req, res) => {
+  const { email, code } = req.body;
 
-    console.log('Token received for verification:', token);  // <---- Add here
-
-    if (!token) {
-      return res.status(400).json({ message: 'Verification token is missing' });
-    }
-
-    const user = await User.findOne({ verificationToken: token.trim() });
-
-    console.log('User found for token:', user);  // <---- Add here
-
-    if (!user) {
-      return res.status(400).json({ message: 'Invalid or expired verification token' });
-    }
-
-    if (user.verified) {
-      return res.status(200).json({ message: 'Email already verified!' });
-    }
-
-    user.verified = true;
-    user.verificationToken = undefined;
-    await user.save();
-
-    return res.status(200).json({ message: 'Email verified successfully! You can now login.' });
-  } catch (error) {
-    return res.status(500).json({ message: 'Email verification failed', error: error.message });
+  const user = await User.findOne({ email });
+  if (!user) {
+    res.status(400);
+    throw new Error('User not found');
   }
-};
 
+   if (user.codeExpiresAt && user.codeExpiresAt < new Date()) {
+    res.status(400);
+    throw new Error('Verification code has expired');
+  }
 
+  const isMatch = await bcrypt.compare(code, user.verificationCode);
+  if (!isMatch) {
+    res.status(400);
+    throw new Error('Invalid verification code');
+  }
+
+  user.verified = true;
+  user.verificationCode = undefined;
+   user.codeExpiresAt = undefined; // Clear after verification
+  await user.save();
+
+  res.status(200).json({ message: 'Email verified successfully' });
+});
+
+   
+        
 
 
 
@@ -149,46 +146,6 @@ const loginUser = async (req, res) => {
   }
 };
 
-
-// const forgotPassword = async (req, res) => {
-//   try {
-//     const { email } = req.body;
-
-//     // Check if email exists
-//     const user = await User.findOne({ email });
-//     if (!user) {
-//       return res.status(404).json({ message: 'No user with this email found' });
-//     }
-
-//     // Generate secure random token
-//     const resetToken = crypto.randomBytes(32).toString('hex');
-//     const resetTokenExpiry = Date.now() + 3600000; // 1 hour
-
-//     // Save token and expiry in user doc
-//     user.resetPasswordToken = resetToken;
-//     user.resetPasswordExpires = resetTokenExpiry;
-//     await user.save();
-
-//     // Email with reset link
-//     const resetUrl = `http://localhost:5000/api/reset-password?token=${resetToken}`;
-
-//     const mailOptions = {
-//       from: process.env.EMAIL_USER,
-//       to: email,
-//       subject: 'Task Manager: Password Reset Request',
-//       html: `<p>Hello ${user.name},</p>
-//              <p>You requested a password reset. Click below to reset:</p>
-//              <a href="${resetUrl}">${resetUrl}</a>
-//              <p>This link expires in 1 hour.</p>`,
-//     };
-
-//     await transporter.sendMail(mailOptions);
-
-//     res.status(200).json({ message: 'Reset password link sent to your email' });
-//   } catch (error) {
-//     res.status(500).json({ message: 'Failed to send reset link', error: error.message });
-//   }
-// };
 
 const forgotPassword = async (req, res) => {
   try {
