@@ -3,6 +3,7 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';  
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -48,6 +49,12 @@ const Login = () => {
           style={{ width: '100%', marginBottom: '10px', padding: '10px' }}
         />
         <button type="submit" style={{ padding: '10px 20px' }}>Login</button>
+      <p style={{ textAlign: 'left', marginTop: '10px' }}>
+      <Link to="/forgot-password"  className="forgot-link">
+       Forgot Password?
+      </Link>
+</p>
+
       </form>
       <p>{message}</p>
     </div>

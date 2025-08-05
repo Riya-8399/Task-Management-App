@@ -1,6 +1,14 @@
+
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
+  const navigate = useNavigate();
+
+  const handleGetStarted = () => {
+    navigate('/signup'); // Redirect to the signup page
+  };
+
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Welcome to Task Manager</h1>
@@ -25,7 +33,7 @@ const Home = () => {
         </div>
       </div>
 
-      <button style={styles.ctaButton} onClick={() => alert('Get Started!')}>
+      <button style={styles.ctaButton} onClick={handleGetStarted}>
         Get Started
       </button>
     </div>
@@ -83,26 +91,3 @@ const styles = {
 
 export default Home;
 
-
-// import React from 'react';
-// import { Link } from 'react-router-dom';
-
-// const Home = () => {
-//   return (
-//     <div style={{ textAlign: 'center', padding: '2rem' }}>
-//       <h1>Welcome to Task Manager App</h1>
-//       <p>Your all-in-one place to manage tasks, track progress, and stay productive.</p>
-
-//       <div style={{ marginTop: '2rem' }}>
-//         <Link to="/signup">
-//           <button style={{ padding: '10px 20px', marginRight: '10px' }}>Sign Up</button>
-//         </Link>
-//         <Link to="/login">
-//           <button style={{ padding: '10px 20px' }}>Login</button>
-//         </Link>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Home;

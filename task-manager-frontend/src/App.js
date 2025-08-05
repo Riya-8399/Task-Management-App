@@ -1,7 +1,3 @@
-
-
-
-
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './Home';
@@ -9,13 +5,12 @@ import Signup from './Signup';
 import Login from './Login';
 import VerifyEmail from './VerifyEmail';
 import ForgotPassword from './ForgotPassword';
-import ResetPassword from './ResetPassword';
+//import ResetPassword from './ResetPassword';
 import Profile from './Profile';
+import VerifyCode from './VerifyCode';
+import SetNewPassword from './SetNewPassword';
 
-
-
-
- function App() {
+function App() {
   return (
     <Router>
       <Routes>
@@ -25,7 +20,8 @@ import Profile from './Profile';
          <Route path="/verify-email" element={<VerifyEmail />} />
          <Route path="/signup" element={<Signup />} />
          <Route path="/forgot-password" element={<ForgotPassword />} />
-         <Route path="/reset-password" element={<ResetPassword />} />
+         <Route path="/verify-code" element={<VerifyCode />} />
+         <Route path="/set-new-password" element={<SetNewPassword />} />
        </Routes>
     </Router>
   );

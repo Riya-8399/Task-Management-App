@@ -30,6 +30,13 @@ codeExpiresAt: { type: Date }, // <-- ADD THIS
     type: Boolean,
     default: false,        // user is not verified by default
   },
+  resetCode: {
+  type: String,
+},
+resetCodeExpires: {
+  type: Date,
+},
+
  });
 
 // Step 2: Create a model from the schema

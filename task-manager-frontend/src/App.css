@@ -36,3 +36,18 @@
     transform: rotate(360deg);
   }
 }
+.forgot-link {
+  display: inline-block;
+  margin-top: 10px;
+  text-decoration: none;
+  color: #007bff;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+
+.forgot-link:hover {
+  color: #a3cbf5 !important;
+  text-decoration: underline;
+}
+
+
