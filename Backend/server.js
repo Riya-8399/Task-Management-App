@@ -8,7 +8,7 @@ app.use(cors()); // <-- allows frontend to talk to backend
 
 require('dotenv').config();
 
-const authRoutes = require('./routes/authroutes');
+const authRoutes = require('./routes/authRoutes');
 
 // Middleware
 app.use(express.json()); // middleware to parse JSON body

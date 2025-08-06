@@ -4,6 +4,7 @@ const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const asyncHandler = require("express-async-handler");
+const jwt = require('jsonwebtoken');
 
 // Setup email transporter (example using Gmail SMTP)
 const transporter = nodemailer.createTransport({
@@ -151,11 +152,20 @@ const loginUser = async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({ message: "Incorrect password" });
     }
+     // Create JWT
+    const token = jwt.sign(
+      { id: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+
     // If all good
     res
       .status(200)
       .json({
         message: "Login successful",
+        token, 
         user: { name: user.name, email: user.email },
       });
   } catch (error) {
@@ -197,8 +207,7 @@ const forgotPassword = async (req, res) => {
     await transporter.sendMail(mailOptions);
     res.status(200).json({ message: "Reset code sent to your email" });
   } catch (error) {
-    res
-      .status(500)
+    res.status(500)
       .json({ message: "Failed to send reset code", error: error.message });
   }
 };
@@ -253,16 +262,10 @@ const setNewPasswordAfterCode = async (req, res) => {
 
 
 
-// Get user profile
+// Get user profile (JWT version)
 const getProfile = async (req, res) => {
   try {
-    const { email } = req.headers; // or req.body
-
-    if (!email) {
-      return res.status(400).json({ message: "Email is required in headers" });
-    }
-
-    const user = await User.findOne({ email }).select(
+    const user = await User.findById(req.user.id).select(
       "-password -verificationToken -resetPasswordToken -resetPasswordExpires"
     );
 
@@ -272,11 +275,10 @@ const getProfile = async (req, res) => {
 
     res.status(200).json({ user });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Failed to get profile", error: error.message });
+    res.status(500).json({ message: "Failed to get profile", error: error.message });
   }
 };
+
 
 // Update user profile
 const updateProfile = async (req, res) => {
