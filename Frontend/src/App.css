@@ -1,84 +1,34 @@
 
+
+/* Tailwind directives — make sure these are present in your main CSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Optional: global box-sizing and font smoothing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  @apply bg-gray-50 text-gray-800 antialiased;
+  margin: 0;
+  font-family: 'Inter', sans-serif; /* or your preferred font */
+}
+
+/* Optional: root container flex centering for your <App> */
 .App {
-  text-align: center;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem;
-  box-sizing: border-box;
+  @apply min-h-screen flex justify-center items-center p-4;
 }
 
+/* You can keep a global max-width container if you want */
 .page-container {
-  width: 100%;
-  max-width: 400px;
-  background: #fff;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  @apply w-full max-w-md bg-white p-6 rounded-lg shadow-md;
 }
 
-/* Input & Button Styling */
-input, button {
-  width: 100%;
-  padding: 0.75rem;
-  margin-bottom: 1rem;
-  font-size: 1rem;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-}
 
-button {
-  background: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
 
-button:hover {
-  background: #0056b3;
-}
 
-/* Forgot Password Link */
-.forgot-link {
-  display: inline-block;
-  margin-top: 10px;
-  text-decoration: none;
-  color: #007bff;
-  font-size: 0.9rem;
-  transition: color 0.2s ease;
-}
 
-.forgot-link:hover {
-  color: #a3cbf5 !important;
-  text-decoration: underline;
-}
-
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-  .page-container {
-    max-width: 90%;
-    padding: 1.5rem;
-  }
-
-  input, button {
-    font-size: 0.95rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .page-container {
-    padding: 1rem;
-  }
-
-  h2 {
-    font-size: 1.2rem;
-  }
-
-  input, button {
-    font-size: 0.9rem;
-    padding: 0.65rem;
-  }
-}

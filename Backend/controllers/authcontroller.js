@@ -1,12 +1,12 @@
 const User = require("../models/user"); // Import the User model
-const { v4: uuidv4 } = require("uuid"); // for generating unique tokens
+// const { v4: uuidv4 } = require("uuid"); // for generating unique tokens
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const asyncHandler = require("express-async-handler");
 const jwt = require('jsonwebtoken');
 
-// Setup email transporter (example using Gmail SMTP)
+// Creats an email transporter (example using Gmail SMTP)
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -16,7 +16,7 @@ const transporter = nodemailer.createTransport({
 });
 
 const signupUser = asyncHandler(async (req, res) => {
-  const { fullName, email, password } = req.body;
+  const { fullName, email, password } = req.body;// destructuring the req body
 
   // Check if user exists
   const existingUser = await User.findOne({ email });
@@ -281,31 +281,59 @@ const getProfile = async (req, res) => {
 
 
 // Update user profile
+// const updateProfile = async (req, res) => {
+//   try {
+//     const { email } = req.headers; // identify user
+//     const { name, newEmail } = req.body;
+
+//     if (!email) {
+//       return res.status(400).json({ message: "Email is required in headers" });
+//     }
+
+//     const user = await User.findOne({ email });
+
+//     if (!user) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+
+//     if (name) user.name = name;
+//     if (newEmail) user.email = newEmail;
+
+//     await user.save();
+
+//     res.status(200).json({ message: "Profile updated successfully", user });
+//   } catch (error) {
+//     res
+//       .status(500)
+//       .json({ message: "Failed to update profile", error: error.message });
+//   }
+// };
+
 const updateProfile = async (req, res) => {
   try {
-    const { email } = req.headers; // identify user
+    // Get user ID from JWT decoded token (set by your authenticateJWT middleware)
+    const userId = req.user.id; 
+
+    // Extract new data from request body
     const { name, newEmail } = req.body;
 
-    if (!email) {
-      return res.status(400).json({ message: "Email is required in headers" });
-    }
-
-    const user = await User.findOne({ email });
+    // Find user by ID
+    const user = await User.findById(userId);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
+    // Update fields if provided
     if (name) user.name = name;
     if (newEmail) user.email = newEmail;
 
+    // Save changes
     await user.save();
 
     res.status(200).json({ message: "Profile updated successfully", user });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Failed to update profile", error: error.message });
+    res.status(500).json({ message: "Failed to update profile", error: error.message });
   }
 };
 

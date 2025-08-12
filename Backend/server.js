@@ -9,11 +9,12 @@ app.use(cors()); // <-- allows frontend to talk to backend
 require('dotenv').config();
 
 const authRoutes = require('./routes/authRoutes');
+const taskRoutes = require('./routes/taskRoutes');
 
 // Middleware
 app.use(express.json()); // middleware to parse JSON body
 app.use('/api', authRoutes); // all auth routes start with /api
-
+app.use('/api/tasks', taskRoutes); // all task routes start with /api/tasks
 // Test route
 app.get('/', (req, res) => {
   res.send('Hello World! Task Manager Backend is running');
