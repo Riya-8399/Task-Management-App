@@ -1,6 +1,5 @@
-
-
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const CreateTask = () => {
   const [formData, setFormData] = useState({
@@ -11,17 +10,33 @@ const CreateTask = () => {
     status: 'pending',
   });
 
+   const [message, setMessage] = useState('');
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit =  async (e) => {
     e.preventDefault();
-    // For now, just log form data - later you can connect to backend API
-    console.log('Task created:', formData);
-    alert('Task created successfully!');
-    // Clear form (optional)
+     setMessage('');
+
+    try {
+      // Get token from localStorage if authentication is required
+      const token = localStorage.getItem('token');
+
+      // Send data to backend
+      const res = await axios.post(
+        'http://localhost:5000/api/tasks',
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, //Include token if needed
+          },
+        }
+      );
+      setMessage(res.data.message || 'Task created successfully!');
+     // Clear form (optional)
     setFormData({
       title: '',
       description: '',
@@ -29,12 +44,23 @@ const CreateTask = () => {
       priority: 'medium',
       status: 'pending',
     });
+  
+   } catch (err) {
+      setMessage(err.response?.data?.message || 'Failed to create task');
+    }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0a1a2f] via-[#162c4a] to-[#273858] flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6">
         <h2 className="text-2xl font-bold mb-6 text-gray-800">Create New Task</h2>
+
+           {/* Show message if available */}
+        {message && (
+          <p className={`mb-4 text-center text-sm ${message.includes('success') ? 'text-green-600' : 'text-red-600'}`}>
+            {message}
+          </p>
+        )}
         
         <form onSubmit={handleSubmit} className="space-y-5">
           <input

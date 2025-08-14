@@ -280,34 +280,7 @@ const getProfile = async (req, res) => {
 };
 
 
-// Update user profile
-// const updateProfile = async (req, res) => {
-//   try {
-//     const { email } = req.headers; // identify user
-//     const { name, newEmail } = req.body;
 
-//     if (!email) {
-//       return res.status(400).json({ message: "Email is required in headers" });
-//     }
-
-//     const user = await User.findOne({ email });
-
-//     if (!user) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
-
-//     if (name) user.name = name;
-//     if (newEmail) user.email = newEmail;
-
-//     await user.save();
-
-//     res.status(200).json({ message: "Profile updated successfully", user });
-//   } catch (error) {
-//     res
-//       .status(500)
-//       .json({ message: "Failed to update profile", error: error.message });
-//   }
-// };
 
 const updateProfile = async (req, res) => {
   try {
