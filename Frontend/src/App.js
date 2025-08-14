@@ -19,7 +19,7 @@ function App() {
       <div className="flex flex-col justify-center items-center min-h-screen p-4 text-center bg-gray-50">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
           <Route path="/login" element={<Login />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/signup" element={<Signup />} />

@@ -6,8 +6,8 @@ const CreateTask = () => {
     title: '',
     description: '',
     dueDate: '',
-    priority: 'medium',
-    status: 'pending',
+    priority: 'Medium',
+    status: 'Pending',
   });
 
    const [message, setMessage] = useState('');

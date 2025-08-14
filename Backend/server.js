@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors'); // <-- this line is now valid
+const cors = require('cors'); 
 
 const app = express();
 app.use(cors()); // <-- allows frontend to talk to backend
