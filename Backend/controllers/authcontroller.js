@@ -262,7 +262,7 @@ const setNewPasswordAfterCode = async (req, res) => {
 
 
 
-// Get user profile (JWT version)
+
 const getProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select(
@@ -273,42 +273,45 @@ const getProfile = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json({ user });
+  
+   res.status(200).json({ 
+      user: {
+        _id: user._id,
+        name: user.fullName,  
+        email: user.email
+      }
+    });
   } catch (error) {
     res.status(500).json({ message: "Failed to get profile", error: error.message });
   }
 };
 
-
-
-
 const updateProfile = async (req, res) => {
   try {
-    // Get user ID from JWT decoded token (set by your authenticateJWT middleware)
-    const userId = req.user.id; 
-
-    // Extract new data from request body
+    const userId = req.user.id;
     const { name, newEmail } = req.body;
 
-    // Find user by ID
     const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
 
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    // Update fields if provided
-    if (name) user.name = name;
+    if (name) user.fullName = name;   // <-- update fullname in DB
     if (newEmail) user.email = newEmail;
 
-    // Save changes
     await user.save();
-
-    res.status(200).json({ message: "Profile updated successfully", user });
+ 
+    res.status(200).json({
+      message: "Profile updated successfully",
+      user: {
+        _id: user._id,
+        name: user.fullName,
+        email: user.email
+      }
+    });
   } catch (error) {
     res.status(500).json({ message: "Failed to update profile", error: error.message });
   }
 };
+
 
 module.exports = {
   signupUser,
@@ -320,3 +323,5 @@ module.exports = {
   getProfile,
   updateProfile,
 };
+
+

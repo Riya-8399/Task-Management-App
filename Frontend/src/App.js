@@ -6,6 +6,7 @@ import Login from './components/Login';
 import VerifyEmail from './components/VerifyEmail';
 import ForgotPassword from './components/ForgotPassword';
 import Profile from './components/Profile';
+import UpdateProfile from './components/UpdateProfile';
 import VerifyCode from './components/VerifyCode';
 import SetNewPassword from './components/SetNewPassword';
 import CreateTask from './components/CreateTask';
@@ -20,6 +21,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
+          <Route path="/update-profile" element={<PrivateRoute><UpdateProfile /></PrivateRoute>} />
           <Route path="/login" element={<Login />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/signup" element={<Signup />} />

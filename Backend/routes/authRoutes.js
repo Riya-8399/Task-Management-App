@@ -13,6 +13,6 @@ router.post('/verify-reset-code', verifyResetCode);
 router.post('/set-new-password', setNewPasswordAfterCode);
 // Protected routes (JWT required)
 router.get('/profile', authenticateJWT, getProfile);
-router.put('/profile', authenticateJWT, updateProfile);
+router.put('/update-profile', authenticateJWT, updateProfile)
 
 module.exports = router;
