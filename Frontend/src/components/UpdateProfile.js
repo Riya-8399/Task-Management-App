@@ -3,7 +3,14 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const UpdateProfile = () => {
-  const [formData, setFormData] = useState({ name: "", newEmail: "" });
+const [formData, setFormData] = useState({
+  name: "",
+  newEmail: "",
+  phone: "",
+  address: "",
+  city: ""
+});
+
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
@@ -22,9 +29,13 @@ const UpdateProfile = () => {
 
         if (res.data.user) {
           setFormData({
-            name: res.data.user.name,
-            newEmail: res.data.user.email,
-          });
+  name: res.data.user.name,
+  newEmail: res.data.user.email,
+  phone: res.data.user.phone || "",
+  address: res.data.user.address || "",
+  city: res.data.user.city || ""
+});
+
         } else {
           setMessage("User data not found");
         }
@@ -68,7 +79,7 @@ const UpdateProfile = () => {
 
         {message && <p className="mb-4 text-center text-sm text-red-600">{message}</p>}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">Name
           <input
             type="text"
             name="name"
@@ -78,7 +89,7 @@ const UpdateProfile = () => {
             required
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
-
+            Email
           <input
             type="email"
             name="newEmail"
@@ -88,6 +99,37 @@ const UpdateProfile = () => {
             required
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
+          <div>
+  <p className="text-gray-600 font-medium">Phone</p>
+  <input
+    type="text"
+    name="phone"
+    value={formData.phone || ""}
+    onChange={handleChange}
+    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+  />
+</div>
+<div>
+  <p className="text-gray-600 font-medium">Address</p>
+  <input
+    type="text"
+    name="address"
+    value={formData.address || ""}
+    onChange={handleChange}
+    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+  />
+</div>
+<div>
+  <p className="text-gray-600 font-medium">City</p>
+  <input
+    type="text"
+    name="city"
+    value={formData.city || ""}
+    onChange={handleChange}
+    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+  />
+</div>
+
 
           <button
             type="submit"

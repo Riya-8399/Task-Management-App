@@ -19,7 +19,15 @@ const userSchema = new mongoose.Schema({
     required: true,
     minlength: 6              // password must be at least 6 characters
   },
-
+  phone: { 
+    type: String
+  },    // new field
+  address: {
+     type: String
+   },       // new field
+  city: { 
+    type: String 
+  },
  // NEW fields for email verification
  verificationCode: {
   type: String,

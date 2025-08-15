@@ -278,7 +278,10 @@ const getProfile = async (req, res) => {
       user: {
         _id: user._id,
         name: user.fullName,  
-        email: user.email
+        email: user.email,
+        phone: user.phone,
+        address: user.address,
+        city: user.city
       }
     });
   } catch (error) {
@@ -286,16 +289,20 @@ const getProfile = async (req, res) => {
   }
 };
 
+//updateprofile
 const updateProfile = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { name, newEmail } = req.body;
+    const { name, newEmail, phone, address, city } = req.body;
 
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    if (name) user.fullName = name;   // <-- update fullname in DB
+    if (name) user.fullName = name;   
     if (newEmail) user.email = newEmail;
+    if (phone) user.phone = phone;
+    if (address) user.address = address;
+    if (city) user.city = city;
 
     await user.save();
  
@@ -304,7 +311,10 @@ const updateProfile = async (req, res) => {
       user: {
         _id: user._id,
         name: user.fullName,
-        email: user.email
+        email: user.email,
+        phone: user.phone,
+        address: user.address,
+        city: user.city
       }
     });
   } catch (error) {

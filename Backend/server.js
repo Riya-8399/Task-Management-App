@@ -6,7 +6,7 @@ const app = express();
 app.use(cors()); // <-- allows frontend to talk to backend
 
 
-require('dotenv').config();
+require('dotenv').config(); //Makes hidden variables accessible in your code using process.env.VARIABLE_NAME.
 
 const authRoutes = require('./routes/authRoutes');
 const taskRoutes = require('./routes/taskRoutes');
