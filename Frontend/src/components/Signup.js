@@ -80,10 +80,18 @@ const Signup = () => {
           >
             Sign Up
           </button>
+
+          <p className="text-center text-gray-600 mt-4">
+            Already have an account?{' '}
+            <a href="/login" className="text-indigo-600 hover:underline">
+              Log In
+            </a>
+          </p>
         </form>
       </div>
     </div>
   );
-};
+}
+        
 
 export default Signup;

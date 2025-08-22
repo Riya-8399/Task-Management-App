@@ -11,36 +11,77 @@ import VerifyCode from './components/VerifyCode';
 import SetNewPassword from './components/SetNewPassword';
 import CreateTask from './components/CreateTask';
 import PrivateRoute from './components/PrivateRoute';
-
+import Layout from "./components/Layout";
+import Dashboard from "./components/Dashboard";
+import MyTasks from "./components/MyTasks";
+import Settings from "./components/Settings";
 
 
 function App() {
   return (
     <Router>
-      <div className="flex flex-col justify-center items-center min-h-screen p-4 text-center bg-gray-50">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
-          <Route path="/update-profile" element={<PrivateRoute><UpdateProfile /></PrivateRoute>} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/verify-email" element={<VerifyEmail />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/verify-code" element={<VerifyCode />} />
-          <Route path="/set-new-password" element={<SetNewPassword />} />
-          <Route path="/create-task" element={<PrivateRoute><CreateTask /></PrivateRoute>} />
-        </Routes>
-      </div>
+      <Routes>
+          
+
+        {/* Public routes */}
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/verify-code" element={<VerifyCode />} />
+        <Route path="/set-new-password" element={<SetNewPassword />} />
+
+      
+        {/* Protected routes */}
+        <Route path="/create-task" element={<PrivateRoute><Layout><CreateTask /></Layout></PrivateRoute>} />
+        <Route path="/dashboard" element={<PrivateRoute><Layout><Dashboard /></Layout></PrivateRoute>} />
+        <Route path="/mytasks" element={<PrivateRoute><Layout><MyTasks /></Layout></PrivateRoute>} />
+        <Route path="/profile" element={<PrivateRoute><Layout><Profile /></Layout></PrivateRoute>} />
+        <Route path="/update-profile" element={<PrivateRoute><Layout><UpdateProfile /></Layout></PrivateRoute>} />
+        <Route path="/settings" element={<PrivateRoute><Layout><Settings /></Layout></PrivateRoute>} />
+      </Routes>
     </Router>
   );
 }
-
 export default App;
 
 
 
+// function App() {
+//   return (
+//     <Router>
+      
+//         <Routes>
+//            {/* Public routes */}
+//           <Route path="/" element={<Home />} />
+          
+//           <Route path="/login" element={<Login />} />
+//           <Route path="/verify-email" element={<VerifyEmail />} />
+//           <Route path="/signup" element={<Signup />} />
+//           <Route path="/forgot-password" element={<ForgotPassword />} />
+//           <Route path="/verify-code" element={<VerifyCode />} />
+//           <Route path="/set-new-password" element={<SetNewPassword />} />
+          
 
+//             {/* Authenticated routes with Layout */}
+            
+//         <Route
+//           path="/profile"element={ <PrivateRoute><Layout><Profile /> </Layout></PrivateRoute> } />
+//         <Route
+//           path="/update-profile"element={ <PrivateRoute><Layout><UpdateProfile /> </Layout> </PrivateRoute> }  />
+//         <Route
+//           path="/dashboard" element={  <PrivateRoute><Layout> <Dashboard /> </Layout> </PrivateRoute>}  />
+//         <Route
+//           path="/mytasks"  element={ <PrivateRoute>   <Layout> <MyTasks/></Layout>  </PrivateRoute>  } />
+//         <Route
+//           path="/settings" element={<PrivateRoute><Layout> <Settings />   </Layout>  </PrivateRoute> }/>
+//         <Route
+//           path="/create-task" element={<PrivateRoute><Layout><CreateTask /> </Layout></PrivateRoute> }/>
+         
+//         </Routes>
+//     </Router>
+//   );
+// }
 
-
-
-
+// export default App;

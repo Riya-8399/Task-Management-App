@@ -15,13 +15,13 @@ const taskSchema = new mongoose.Schema({
   },
   priority: {
     type: String,
-    enum: ['Low', 'Medium', 'High'], // restrict values
-    default: 'Medium',
+    enum: ['low', 'medium', 'high'], // restrict values
+    default: 'medium',
   },
   status: {
     type: String,
-    enum: ['Pending', 'Completed'],
-    default: 'Pending',
+    enum: ['pending', 'completed'],
+    default: 'pending',
   },
 }, { timestamps: true }); // automatically add createdAt and updatedAt
 

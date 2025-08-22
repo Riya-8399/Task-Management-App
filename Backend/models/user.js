@@ -44,6 +44,8 @@ codeExpiresAt: { type: Date }, // <-- ADD THIS
 resetCodeExpires: {
   type: Date,
 },
+refreshToken: { type: String }
+
 
  });
 

@@ -3,7 +3,12 @@ const Task = require('../models/Task');
 // Create a new task
 exports.createTask = async (req, res) => {
   try {
-    const { title, description, dueDate, priority, status } = req.body;
+    let { title, description, dueDate, priority, status } = req.body;
+    status = status.toLowerCase();
+    priority = priority.toLowerCase();
+    
+
+    console.log('Creating task with data:', req.body);
 
     if (!title) {
       return res.status(400).json({ message: 'Title is required' });

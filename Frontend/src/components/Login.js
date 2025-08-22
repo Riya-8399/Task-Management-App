@@ -1,5 +1,3 @@
-
-
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
@@ -19,9 +17,14 @@ const Login = () => {
       });
 
       console.log('Login response:', res.data);
-      localStorage.setItem("token", res.data.token);
+        // Save tokens
+    localStorage.setItem("accessToken", res.data.accessToken);
+    localStorage.setItem("refreshToken", res.data.refreshToken);
+    localStorage.setItem("isReturningUser", "true");
       setMessage(res.data.message);
       navigate('/create-task');
+      
+
     } catch (err) {
       console.error('Login error:', err.response?.data || err.message);
       setMessage(err.response?.data?.message || 'Login failed');

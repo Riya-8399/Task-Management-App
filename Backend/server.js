@@ -4,6 +4,13 @@ const cors = require('cors');
 
 const app = express();
 app.use(cors()); // <-- allows frontend to talk to backend
+const cookieParser = require('cookie-parser');
+// Middleware to parse JSON and URL-encoded data
+
+// other middlewares
+app.use(express.json());
+app.use(cookieParser());  // <-- parses cookies from the request headers
+
 
 
 require('dotenv').config(); //Makes hidden variables accessible in your code using process.env.VARIABLE_NAME.

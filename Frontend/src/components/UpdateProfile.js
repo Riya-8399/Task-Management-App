@@ -17,7 +17,7 @@ const [formData, setFormData] = useState({
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("accessToken");
         if (!token) {
           setMessage("Token not found. Please login.");
           return;
@@ -55,7 +55,7 @@ const [formData, setFormData] = useState({
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("accessToken");
       const res = await axios.put(
         "http://localhost:5000/api/update-profile",
         formData,
@@ -77,7 +77,7 @@ const [formData, setFormData] = useState({
       <div className="w-full max-w-md bg-white shadow-md rounded-lg p-6">
         <h2 className="text-2xl font-semibold text-center mb-6 text-gray-800">Update Profile</h2>
 
-        {message && <p className="mb-4 text-center text-sm text-red-600">{message}</p>}
+        {message && <p className="mb-4 text-center text-sm text-green-600">{message}</p>}
 
         <form onSubmit={handleSubmit} className="space-y-4">Name
           <input

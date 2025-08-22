@@ -1,10 +1,10 @@
 const User = require("../models/user"); // Import the User model
-// const { v4: uuidv4 } = require("uuid"); // for generating unique tokens
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const asyncHandler = require("express-async-handler");
 const jwt = require('jsonwebtoken');
+
 
 // Creats an email transporter (example using Gmail SMTP)
 const transporter = nodemailer.createTransport({
@@ -15,6 +15,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+// Signup user
 const signupUser = asyncHandler(async (req, res) => {
   const { fullName, email, password } = req.body;// destructuring the req body
 
@@ -114,64 +115,88 @@ const signupUser = asyncHandler(async (req, res) => {
   }
 };
 
-
-
-   
-
-//post/api/login
-
+// Login user
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Check if both fields are provided
     if (!email || !password) {
-      return res
-        .status(400)
-        .json({ message: "Please enter email and password" });
+      return res.status(400).json({ message: "Please enter email and password" });
     }
 
-    // Check if user exists
     const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found. Please sign up." });
+    if (!user.verified) return res.status(403).json({ message: "Please verify your email first." });
 
-    if (!user) {
-      return res
-        .status(404)
-        .json({ message: "User not found. Please sign up first." });
-    }
-
-    // Check if email is verified
-    if (!user.verified) {
-      return res
-        .status(403)
-        .json({ message: "Please verify your email before logging in." });
-    }
-
-    // Check password match
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ message: "Incorrect password" });
-    }
-     // Create JWT
-    const token = jwt.sign(
+    if (!isMatch) return res.status(401).json({ message: "Incorrect password" });
+
+    // Create short-lived access token
+    const accessToken = jwt.sign(
       { id: user._id, email: user.email },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: '1h' } // access token valid for 1 hour
     );
 
+    // Create long-lived refresh token
+    const refreshToken = jwt.sign(
+      { id: user._id, email: user.email },
+      process.env.REFRESH_TOKEN_SECRET,
+      { expiresIn: '7d' } // refresh token valid for 7 days
+    );
 
-    // If all good
-    res
-      .status(200)
-      .json({
-        message: "Login successful",
-        token, 
-        user: { name: user.name, email: user.email },
-      });
+    // Save refresh token in DB
+    user.refreshToken = refreshToken;
+    await user.save();
+
+    // Send refresh token as httpOnly cookie, access token in response
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // true in production
+      sameSite: 'Strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+
+    res.status(200).json({
+      message: "Login successful",
+      accessToken,
+      user: { name: user.name, email: user.email },
+    });
+
   } catch (error) {
     res.status(500).json({ message: "Login failed", error: error.message });
   }
 };
+
+// Refresh token endpoint
+const refreshToken = async (req, res) => {
+  try {
+    const token = req.cookies?.refreshToken;
+    if (!token) return res.status(401).json({ message: 'No refresh token provided' });
+
+    const decoded = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
+    const user = await User.findById(decoded.id);
+
+    if (!user || user.refreshToken !== token) {
+      return res.status(403).json({ message: 'Invalid refresh token' });
+    }
+
+    // Issue a new short-lived access token
+    const newAccessToken = jwt.sign(
+      { id: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' } // 1 hour
+    );
+
+    res.status(200).json({ accessToken: newAccessToken });
+
+  } catch (error) {
+    res.status(403).json({ message: 'Refresh failed', error: error.message });
+  }
+};
+
+
+
 
 
 
@@ -262,7 +287,7 @@ const setNewPasswordAfterCode = async (req, res) => {
 
 
 
-
+// Get user profile
 const getProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select(
@@ -332,6 +357,7 @@ module.exports = {
   setNewPasswordAfterCode,
   getProfile,
   updateProfile,
+   refreshToken
 };
 
 
