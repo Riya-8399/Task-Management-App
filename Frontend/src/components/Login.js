@@ -68,8 +68,14 @@ const Login = () => {
           </div>
         </form>
 
+        
+
         {message && (
-          <p className="mt-4 text-center text-sm text-red-600">{message}</p>
+          <p className="mt-4 text-center text-sm text-red-600">{message} <Link to="/signup" style={{ color: "Blue", textDecoration: "underline" }}>
+            Sign Up
+          </Link>
+          .
+          </p>
         )}
       </div>
     </div>

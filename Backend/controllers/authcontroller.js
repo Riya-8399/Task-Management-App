@@ -115,6 +115,8 @@ const signupUser = asyncHandler(async (req, res) => {
   }
 };
 
+
+
 // Login user
 const loginUser = async (req, res) => {
   try {
@@ -125,7 +127,7 @@ const loginUser = async (req, res) => {
     }
 
     const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ message: "User not found. Please sign up." });
+    if (!user) return res.status(404).json({ message: "User not found. Please" });
     if (!user.verified) return res.status(403).json({ message: "Please verify your email first." });
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -168,6 +170,8 @@ const loginUser = async (req, res) => {
   }
 };
 
+
+
 // Refresh token endpoint
 const refreshToken = async (req, res) => {
   try {
@@ -194,9 +198,6 @@ const refreshToken = async (req, res) => {
     res.status(403).json({ message: 'Refresh failed', error: error.message });
   }
 };
-
-
-
 
 
 
@@ -238,6 +239,7 @@ const forgotPassword = async (req, res) => {
 };
 
 
+
 //verifyreset code
 const verifyResetCode = async (req, res) => {
   try {
@@ -265,6 +267,8 @@ const verifyResetCode = async (req, res) => {
       .json({ message: "Verification failed", error: error.message });
   }
 };
+
+
 
 //Setnewpassword aftercode
 const setNewPasswordAfterCode = async (req, res) => {
@@ -313,6 +317,8 @@ const getProfile = async (req, res) => {
     res.status(500).json({ message: "Failed to get profile", error: error.message });
   }
 };
+
+
 
 //updateprofile
 const updateProfile = async (req, res) => {

@@ -14,11 +14,8 @@ const PrivateRoute = ({ children }) => {
         if (res.data?.user) {
           // User exists → allow access
           setRedirectTo(null);
-        } else {
-          // Token valid but user missing → redirect to Home
-          localStorage.removeItem("accessToken");
-          setRedirectTo("/");
-        }
+        } 
+        
       } catch (err) {
         localStorage.removeItem("accessToken");
 
