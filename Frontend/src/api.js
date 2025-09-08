@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:5000/api",
+  // baseURL: "http://localhost:5000/api",
+  baseURL: "http://35.183.101.228:5000/api",
 });
 
 // Request interceptor to attach access token
@@ -31,7 +32,8 @@ api.interceptors.response.use(
 
       try {
         const refreshRes = await axios.post(
-          "http://localhost:5000/api/refresh-token",
+          // "http://localhost:5000/api/refresh-token",
+          "http://35.183.101.228:5000/api/refresh-token",
           {},
           { withCredentials: true }
         );

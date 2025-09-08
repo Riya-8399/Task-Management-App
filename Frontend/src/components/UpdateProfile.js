@@ -23,7 +23,8 @@ const [formData, setFormData] = useState({
           return;
         }
 
-        const res = await axios.get("http://localhost:5000/api/profile", {
+        // const res = await axios.get("http://localhost:5000/api/profile", {
+           const res = await axios.get("http://35.183.101.228:5000/api/profile", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -57,7 +58,8 @@ const [formData, setFormData] = useState({
     try {
       const token = localStorage.getItem("accessToken");
       const res = await axios.put(
-        "http://localhost:5000/api/update-profile",
+        // "http://localhost:5000/api/update-profile",
+        "http://35.183.101.228:5000/api/update-profile",
         formData,
         { headers: { Authorization: `Bearer ${token}` } }
       );

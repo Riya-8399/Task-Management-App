@@ -44,7 +44,8 @@ const VerifyEmail = () => {
     }
 
     try {
-      const res = await axios.post('http://localhost:5000/api/verify-email', {
+      // const res = await axios.post('http://localhost:5000/api/verify-email', {
+      const res = await axios.post('http://35.183.101.228:5000/api/verify-email', {
         email,
         code: codeValue,
       });

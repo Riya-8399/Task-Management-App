@@ -22,7 +22,8 @@ const ProfilePage = () => {
           return;
         }
 
-        const res = await axios.get("http://localhost:5000/api/profile", {
+        // const res = await axios.get("http://localhost:5000/api/profile", {
+         const res = await axios.get("http://35.183.101.228:5000/api/profile", {
           headers: { Authorization: `Bearer ${token}` },
         });
 

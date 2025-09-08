@@ -18,12 +18,15 @@ const CreateTask = () => {
   };
 
   const handleSubmit = async (e) => {
+   
     e.preventDefault();
     setMessage("");
 
     try {
-      const token = localStorage.getItem("token");
-      const res = await axios.post("http://localhost:5000/api/tasks", formData, {
+      const token = localStorage.getItem("accessToken");
+       console.log("Getting token", token)
+      // const res = await axios.post("http://localhost:5000/api/tasks", formData, {
+         const res = await axios.post("http://35.183.101.228:5000/api/tasks", formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

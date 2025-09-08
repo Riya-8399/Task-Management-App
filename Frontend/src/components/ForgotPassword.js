@@ -11,7 +11,8 @@ const ForgotPassword = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post('http://localhost:5000/api/forgot-password', { email });
+      // const res = await axios.post('http://localhost:5000/api/forgot-password', { email });
+       const res = await axios.post('http://35.183.101.228:5000/api/forgot-password', { email });
       setMessage(res.data.message);
       if (res.status === 200) {
         navigate('/verify-code', { state: { email } });

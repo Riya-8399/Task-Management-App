@@ -22,7 +22,8 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/api/signup', formData);
+      // const res = await axios.post('http://localhost:5000/api/signup', formData);
+       const res = await axios.post('http://35.183.101.228:5000/api/signup', formData);
 
       navigate('/verify-email', {
         state: {
