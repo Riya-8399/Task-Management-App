@@ -3,7 +3,13 @@ const mongoose = require('mongoose');
 const cors = require('cors'); 
 
 const app = express();
-app.use(cors()); // <-- allows frontend to talk to backend
+// app.use(cors()); // <-- allows frontend to talk to backend
+app.use(
+  cors({
+    origin: "http://localhost:3000", // your frontend origin
+    credentials: true,               // allows sending cookies
+  })
+);
 const cookieParser = require('cookie-parser');
 // Middleware to parse JSON and URL-encoded data
 
@@ -17,11 +23,14 @@ require('dotenv').config(); //Makes hidden variables accessible in your code usi
 
 const authRoutes = require('./routes/authRoutes');
 const taskRoutes = require('./routes/taskRoutes');
+const settingRoutes = require('./routes/settingRoutes');
 
 // Middleware
 app.use(express.json()); // middleware to parse JSON body
 app.use('/api', authRoutes); // all auth routes start with /api
 app.use('/api/tasks', taskRoutes); // all task routes start with /api/tasks
+app.use('/api/settings', settingRoutes); // all settings routes start with /api/settings
+
 // Test route
 app.get('/', (req, res) => {
   res.send('Hello World! Task Manager Backend is running');

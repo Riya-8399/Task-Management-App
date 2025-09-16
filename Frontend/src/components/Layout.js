@@ -15,12 +15,12 @@ const Layout = ({ children }) => {
       >
         <h2 className="text-2xl font-bold mb-6">Task Manager</h2>
         <nav className="flex flex-col gap-4">
-            <Link to="/dashboard" className="hover:text-blue-400">Dashboard</Link>
+        
           <Link to="/mytasks" className="hover:text-blue-400">My Tasks</Link>
           <Link to="/create-task" className="hover:text-blue-400">Create Task</Link>
           <Link to="/profile" className="hover:text-blue-400">Profile</Link>
           <Link to="/settings" className="hover:text-blue-400">Settings</Link>
-          <Link to="/" className="hover:text-blue-400">Logout</Link>
+          <Link to="/logout" className="hover:text-blue-400">Logout</Link>
         </nav>
       </div>
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import axios from 'axios';
+// import axios from 'axios';
+import api from '../api'; // Axios instance
 
 const VerifyCode = () => {
   const [code, setCode] = useState(['', '', '', '']);
@@ -36,7 +37,7 @@ const VerifyCode = () => {
 
     try {
       // const res = await axios.post('http://localhost:5000/api/verify-reset-code', {
-      const res = await axios.post('http://35.183.101.228:5000/api/verify-reset-code', {
+      const res = await api.post('/verify-reset-code', {
         email,
         code: codeValue,
       });

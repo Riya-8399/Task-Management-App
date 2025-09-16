@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+// import axios from 'axios';
+import api from '../api'; // Axios instance
 
 const SetNewPassword = () => {
   const [newPassword, setNewPassword] = useState('');
@@ -30,7 +31,7 @@ const SetNewPassword = () => {
 
     try {
       // const res = await axios.post(`http://localhost:5000/api/set-new-password`, {
-         const res = await axios.post(`http://35.183.101.228:5000/api/set-new-password`, {
+         const res = await api.post(`/set-new-password`, {
         email,
         newPassword,
       });

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
+import api from '../api'; // Axios instance
 import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
@@ -23,7 +24,7 @@ const Signup = () => {
     e.preventDefault();
     try {
       // const res = await axios.post('http://localhost:5000/api/signup', formData);
-       const res = await axios.post('http://35.183.101.228:5000/api/signup', formData);
+       const res = await api.post('/signup', formData);
 
       navigate('/verify-email', {
         state: {

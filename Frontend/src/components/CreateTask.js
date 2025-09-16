@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import axios from "axios";
+// import axios from "axios";
+import api from "../api"; // Axios instance
 
 const CreateTask = () => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     dueDate: "",
-    priority: "Medium",
-    status: "Pending",
+    priority: "medium",
+    status: "pending",
   });
 
   const [message, setMessage] = useState("");
@@ -26,8 +27,9 @@ const CreateTask = () => {
       const token = localStorage.getItem("accessToken");
        console.log("Getting token", token)
       // const res = await axios.post("http://localhost:5000/api/tasks", formData, {
-         const res = await axios.post("http://35.183.101.228:5000/api/tasks", formData, {
-        headers: { Authorization: `Bearer ${token}` },
+        console.log("Submitting formData:", formData);
+         const res = await api.post("/tasks", formData, {
+        headers: { Authorization: `Bearer ${token}` }
       });
 
       setMessage(res.data.message || "Task created successfully!");
@@ -35,8 +37,8 @@ const CreateTask = () => {
         title: "",
         description: "",
         dueDate: "",
-        priority: "Medium",
-        status: "Pending",
+        priority: "medium",
+        status: "pending",
       });
     } catch (err) {
       setMessage(err.response?.data?.message || "Failed to create task");
@@ -94,6 +96,7 @@ const CreateTask = () => {
           value={formData.priority}
           onChange={handleChange}
           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+        
         >
           <option value="low">Low Priority</option>
           <option value="medium">Medium Priority</option>

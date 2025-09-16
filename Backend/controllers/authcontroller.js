@@ -137,7 +137,7 @@ const loginUser = async (req, res) => {
     const accessToken = jwt.sign(
       { id: user._id, email: user.email },
       process.env.JWT_SECRET,
-      { expiresIn: '1h' } // access token valid for 1 hour
+      { expiresIn: '3d' } // access token valid for 1 day
     );
 
     // Create long-lived refresh token
@@ -321,6 +321,7 @@ const getProfile = async (req, res) => {
 
 
 
+
 //updateprofile
 const updateProfile = async (req, res) => {
   try {
@@ -354,6 +355,33 @@ const updateProfile = async (req, res) => {
   }
 };
 
+// Logout user
+ const logoutUser = async (req, res) => {
+  try {
+    const { refreshToken } = req.body; // frontend should send this, or you can get it from cookies
+
+    if (!refreshToken) {
+      return res.status(400).json({ message: "No refresh token provided" });
+    }
+
+    // Find user with this refresh token and clear it
+    const user = await User.findOne({ refreshToken });
+    if (!user) {
+      return res.status(404).json({ message: "User not found or already logged out" });
+    }
+
+    user.refreshToken = null;
+    await user.save();
+
+    res.status(200).json({ message: "Logged out successfully" });
+  } catch (error) {
+    console.error("Logout error:", error.message);
+    res.status(500).json({ message: "Server error during logout" });
+  }
+};
+
+
+
 
 module.exports = {
   signupUser,
@@ -364,7 +392,8 @@ module.exports = {
   setNewPasswordAfterCode,
   getProfile,
   updateProfile,
-   refreshToken
+   refreshToken,
+  logoutUser
 };
 
 

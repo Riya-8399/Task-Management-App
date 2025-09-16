@@ -86,7 +86,8 @@
 
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
+import api from "../api"; // Axios instance
 
 const Home = () => {
   const navigate = useNavigate();
@@ -98,7 +99,7 @@ const Home = () => {
 
       if (token) {
         try {
-          const res = await axios.get("http://localhost:5000/api/profile", {
+          const res = await api.get("/profile", {
             headers: { Authorization: `Bearer ${token}` },
           });
 

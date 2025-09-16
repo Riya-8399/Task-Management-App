@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
+import api from "../api"; // Axios instance
 import { useNavigate } from "react-router-dom";
 
 const UpdateProfile = () => {
@@ -24,7 +25,7 @@ const [formData, setFormData] = useState({
         }
 
         // const res = await axios.get("http://localhost:5000/api/profile", {
-           const res = await axios.get("http://35.183.101.228:5000/api/profile", {
+           const res = await api.get("/profile", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -57,7 +58,7 @@ const [formData, setFormData] = useState({
     e.preventDefault();
     try {
       const token = localStorage.getItem("accessToken");
-      const res = await axios.put(
+      const res = await api.put(
         // "http://localhost:5000/api/update-profile",
         "http://35.183.101.228:5000/api/update-profile",
         formData,

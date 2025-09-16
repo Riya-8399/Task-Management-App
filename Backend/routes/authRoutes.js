@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const authenticateJWT  = require("../middleware/authenticateJWT");
-const { signupUser, verifyEmail, loginUser, forgotPassword, verifyResetCode, setNewPasswordAfterCode,  getProfile, updateProfile, refreshToken  } = require('../controllers/authcontroller');
+const { signupUser, verifyEmail, loginUser, forgotPassword, verifyResetCode, setNewPasswordAfterCode,  getProfile, updateProfile, refreshToken, logoutUser  } = require('../controllers/authcontroller');
 
 
 
@@ -16,5 +16,6 @@ router.post('/set-new-password', setNewPasswordAfterCode);
 // Protected routes (JWT required)
 router.get('/profile', authenticateJWT, getProfile);
 router.put('/update-profile', authenticateJWT, updateProfile)
+router.post('/logout',  logoutUser);
 
 module.exports = router;

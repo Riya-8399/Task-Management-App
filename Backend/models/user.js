@@ -44,10 +44,15 @@ codeExpiresAt: { type: Date }, // <-- ADD THIS
 resetCodeExpires: {
   type: Date,
 },
-refreshToken: { type: String }
+refreshToken: { type: String },
 
-
- });
+isAdmin: {
+  type: Boolean,
+  default: false
+}
+}, 
+{ timestamps: true }  // automatically create createdAt and updatedAt fields
+);
 
 // Step 2: Create a model from the schema
 const User = mongoose.model('User', userSchema);
