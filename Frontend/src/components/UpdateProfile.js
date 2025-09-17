@@ -58,9 +58,9 @@ const [formData, setFormData] = useState({
     e.preventDefault();
     try {
       const token = localStorage.getItem("accessToken");
-      const res = await api.put(
+      const res = await api.put('/update-profile',
         // "http://localhost:5000/api/update-profile",
-        "http://35.183.101.228:5000/api/update-profile",
+        // "http://35.183.101.228:5000/api/update-profile",
         formData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
