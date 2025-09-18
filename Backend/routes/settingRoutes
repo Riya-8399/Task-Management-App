@@ -2,7 +2,11 @@
 const router = express.Router();
 const authenticateJWT = require('../middleware/authenticateJWT');
 const { changePassword } = require('../controllers/settingscontroller');
+const { deleteAccount } = require('../controllers/settingscontroller');
+
+router.delete('/delete-account', authenticateJWT, deleteAccount);   
 
 router.put('/change-password', authenticateJWT, changePassword);
+
 
 module.exports = router;

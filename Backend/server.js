@@ -2,18 +2,42 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors'); 
 
+const allowedOrigins = [
+  "http://localhost:3000",        // Local dev frontend
+  "http://riya-fullstack-frontend.s3-website.ca-central-1.amazonaws.com/signup"
+  // "https://your-production-url.com" // Production frontend
+
+];
+
 const app = express();
-// app.use(cors()); // <-- allows frontend to talk to backend
-app.use(
-  cors({
-    // origin: "http://localhost:3000", // your frontend origin
-    origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    //  credentials: true,     
-    credentials: false,          // allows sending cookies
-  })
-);
+
+app.use(cors({
+  origin: function(origin, callback){
+    // allow requests with no origin (like Postman)
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){
+      const msg = "The CORS policy for this site does not allow access from the specified Origin.";
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true, // IMPORTANT: allows cookies/JWT
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+// const app = express();
+// // app.use(cors()); // <-- allows frontend to talk to backend
+// app.use(
+//   cors({
+//     origin: "http://localhost:3000", // your frontend origin
+//      credentials: true,     
+//     //// origin: "*",
+//     //// methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+//    // // allowedHeaders: ["Content-Type", "Authorization"],
+//    // // credentials: false,          // allows sending cookies
+//   })
+// );
 const cookieParser = require('cookie-parser');
 // Middleware to parse JSON and URL-encoded data
 
