@@ -6,8 +6,12 @@ const app = express();
 // app.use(cors()); // <-- allows frontend to talk to backend
 app.use(
   cors({
-    origin: "http://localhost:3000", // your frontend origin
-    credentials: true,               // allows sending cookies
+    // origin: "http://localhost:3000", // your frontend origin
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    //  credentials: true,     
+    credentials: false,          // allows sending cookies
   })
 );
 const cookieParser = require('cookie-parser');
@@ -16,6 +20,8 @@ const cookieParser = require('cookie-parser');
 // other middlewares
 app.use(express.json());
 app.use(cookieParser());  // <-- parses cookies from the request headers
+
+
 
 
 

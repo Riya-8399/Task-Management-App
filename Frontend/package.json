@@ -1,7 +1,10 @@
 {
+  
   "name": "task-manager-frontend",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://riya-fullstack-frontend.s3-website.ca-central-1.amazonaws.com",
+
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
@@ -15,6 +18,8 @@
     "react-router-dom": "^7.6.3",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
+    
+
   },
   "scripts": {
     "start": "react-scripts start",
